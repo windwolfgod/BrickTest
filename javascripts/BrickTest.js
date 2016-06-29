@@ -2,7 +2,7 @@ var canvas = document.getElementById("brickConvas");
 var ctx = canvas.getContext("2d"); // 2D渲染環境
 // 環境
 
-var lives = 3;
+var lives = 1;
 
 var score = 0;
 
@@ -117,7 +117,8 @@ function draw() {
     else {  // 沒接到球
       lives--;
       if ( !lives ) {
-        //alert("GAME OVER");
+        //alert("你選擇死亡!!!!");
+        StoreBoard();
         document.location.reload();
       } // if 死光光拉~
       else {
@@ -186,8 +187,9 @@ function collisionDetection() {
           score++;
           changeColor();
           if( score == brickRowCount * brickColumnCount ) {
-            alert( "YOU WIN, CONGRATULATIONS!\nTotal Score = " + ( score * 100 ) );
-            document.location.reload();
+            //StoreBoard();
+            //alert( "YOU WIN, CONGRATULATIONS!\nTotal Score = " + ( score * 100 ) );
+            //document.location.reload();
           } // 打完收工
       } // if 偵測到碰撞
     } // for
@@ -202,3 +204,40 @@ document.addEventListener("click", mouseClickHandler, false);
 
 draw();
 //setInterval(draw, 10); // 每10毫秒執行一次 draw()
+
+function StoreBoard() {
+  var name = prompt("請輸入暱稱","");
+  if ( name != null ) {
+    if ( window.localStorage["name"] == null ) {
+      window.localStorage["name"] = name;
+      window.localStorage["score"] = ( score * 100 );
+    } // if
+    else {
+      window.localStorage["name"] = window.localStorage["name"] + ',' + name;
+      window.localStorage["score"] = window.localStorage["score"] + ',' + ( score * 100 );
+    }
+  } // 有輸入暱稱
+  
+  document.location.reload();
+} // StoreBoard()
+
+function messageBoardHtml( na, sco ) {
+  return ' <div class="col-lg-6"><h3>' + na + '</h3></div><div class="col-lg-6"><h3>' + sco + '</h3></div>';
+} // messageBoardHtml()
+
+function clearScore() {
+  localStorage.clear();
+  document.location.reload();
+} // c;earScore()
+
+window.onload = function() {
+  var messageBoard = document.getElementById("scoreBoard");
+  var storeName = window.localStorage["name"];
+  var storeScore = window.localStorage["score"];
+  var nameArray = storeName.split(",");
+  var scoreArray = storeScore.split(",");
+  if ( storeName != null ) {
+    for ( var i = 0; i < nameArray.length ; i++ )
+      messageBoard.innerHTML = messageBoard.innerHTML + messageBoardHtml( nameArray[i], scoreArray[i] );
+  } // if
+}; // 放在最後因為要等頁面跑完才抓的到scoreBoard
