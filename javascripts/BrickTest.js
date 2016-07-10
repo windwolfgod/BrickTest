@@ -221,8 +221,9 @@ function StoreBoard() {
   document.location.reload();
 } // StoreBoard()
 
-function messageBoardHtml( na, sco ) {
-  return ' <div class="col-lg-6"><h3>' + na + '</h3></div><div class="col-lg-6"><h3>' + sco + '</h3></div>';
+function messageBoardHtml( na, sco, i ) {
+  i++;
+  return '<tr><td>' + i + '</td><td>' + na + '</td><td>' + sco + '</td></tr>';
 } // messageBoardHtml()
 
 function clearScore() {
@@ -238,6 +239,6 @@ window.onload = function() {
   var scoreArray = storeScore.split(",");
   if ( storeName != null ) {
     for ( var i = 0; i < nameArray.length ; i++ )
-      messageBoard.innerHTML = messageBoard.innerHTML + messageBoardHtml( nameArray[i], scoreArray[i] );
+      messageBoard.innerHTML = messageBoard.innerHTML + messageBoardHtml( nameArray[i], scoreArray[i], i );
   } // if
 }; // 放在最後因為要等頁面跑完才抓的到scoreBoard
